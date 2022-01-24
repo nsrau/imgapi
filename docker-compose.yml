@@ -1,0 +1,23 @@
+version: '3'
+
+volumes:
+  uploads: {}
+  node_modules: {}
+
+services:
+    imgapi:
+        container_name: app
+        image: imgapi:0.1.0
+        build:
+            context: .
+            target: production
+            dockerfile: Dockerfile
+            args:
+              - NODE_ENV=production
+        command: npm run start:prod
+        ports:
+            - 3001:3001
+        volumes:
+            - uploads:/usr/app/uploads
+            - node_modules:/usr/app/node_modules
+        restart: unless-stopped
