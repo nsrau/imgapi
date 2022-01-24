@@ -18,7 +18,7 @@ import { Response } from 'express';
 import { UserDto } from './user.dto';
 import { imageFileFilter } from './utils';
 
-const upload = path.join(__dirname, '../', 'uploads');
+const upload = path.join(__dirname, '../', process.env.IMGAPI_UPLOAD_FOLDER);
 
 @Controller()
 export class AppController {
@@ -58,7 +58,7 @@ export class AppController {
     FileInterceptor('image', {
       fileFilter: imageFileFilter,
       storage: diskStorage({
-        destination: './uploads/tmp',
+        destination: `./${process.env.IMGAPI_UPLOAD_FOLDER}/tmp`,
         filename: (req, file, cb) => {
           const randomName = Array(32)
             .fill(null)
@@ -95,7 +95,7 @@ export class AppController {
     try {
       userkey = AppService.encrypt(user.name);
       if (AppService.decrypt(userkey) === user.name) {
-        userPath = `uploads/${userkey}`;
+        userPath = `${process.env.IMGAPI_UPLOAD_FOLDER}/${userkey}`;
         userImgPath = `${userPath}/${image.filename}`;
       }
     } catch (e) {
@@ -118,7 +118,7 @@ export class AppController {
 
     return {
       error,
-      url: userImgPath.replace('uploads/', ''),
+      url: userImgPath.replace(`${process.env.IMGAPI_UPLOAD_FOLDER}/`, ''),
       userKey: userkey,
       img: {
         originalname,

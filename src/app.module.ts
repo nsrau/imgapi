@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     MulterModule.register({
-      dest: './upload/tmp',
+      dest: `./${process.env.IMGAPI_UPLOAD_FOLDER}/tmp`,
     }),
   ],
   controllers: [AppController],
